@@ -1,0 +1,155 @@
+version: '3.8'
+
+services:
+  user-service:
+    build:
+      context: ..
+      dockerfile: docker/user/Dockerfile
+    environment:
+      - MYSQL_MASTER_HOST=mysql-master
+      - MYSQL_SLAVE1_HOST=mysql-slave1
+      - MYSQL_SLAVE2_HOST=mysql-slave2
+      - REDIS_NODE1_HOST=redis-node1
+      - REDIS_NODE2_HOST=redis-node2
+      - REDIS_NODE3_HOST=redis-node3
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  chat-service:
+    build:
+      context: ..
+      dockerfile: docker/chat/Dockerfile
+    environment:
+      - MYSQL_MASTER_HOST=mysql-master
+      - REDIS_NODE1_HOST=redis-node1
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  emotion-service:
+    build:
+      context: ..
+      dockerfile: docker/emotion/Dockerfile
+    environment:
+      - MYSQL_MASTER_HOST=mysql-master
+      - REDIS_NODE1_HOST=redis-node1
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  mysql-master:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=sweekar
+    volumes:
+      - mysql-master-data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+
+  mysql-slave1:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=sweekar
+    volumes:
+      - mysql-slave1-data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+
+  mysql-slave2:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=sweekar
+    volumes:
+      - mysql-slave2-data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+
+  redis-node1:
+    image: redis:6.2
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-node1-data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+
+  redis-node2:
+    image: redis:6.2
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-node2-data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+
+  redis-node3:
+    image: redis:6.2
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-node3-data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+
+volumes:
+  mysql-master-data:
+  mysql-slave1-data:
+  mysql-slave2-data:
+  redis-node1-data:
+  redis-node2-data:
+  redis-node3-data:

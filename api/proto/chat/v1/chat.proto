@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package chat.v1;
+
+option go_package = "github.com/sweekar/api/proto/chat/v1;chatv1";
+
+// 聊天服务定义
+service ChatService {
+  // 开始聊天会话
+  rpc StartChatSession(StartChatSessionRequest) returns (StartChatSessionResponse);
+  // 发送语音消息
+  rpc SendVoiceMessage(stream VoiceMessageRequest) returns (stream VoiceMessageResponse);
+  // 获取系统角色列表
+  rpc GetSystemRoles(GetSystemRolesRequest) returns (GetSystemRolesResponse);
+  // 获取聊天历史记录
+  rpc GetChatHistory(GetChatHistoryRequest) returns (GetChatHistoryResponse);
+}
+
+// 开始聊天会话请求
+message StartChatSessionRequest {
+  string child_id = 1;
+  string role_id = 2;
+}
+
+// 开始聊天会话响应
+message StartChatSessionResponse {
+  string session_id = 1;
+  SystemRole role = 2;
+  string websocket_url = 3;
+}
+
+// 语音消息请求
+message VoiceMessageRequest {
+  string session_id = 1;
+  bytes audio_data = 2;
+  bool is_final = 3;
+}
+
+// 语音消息响应
+message VoiceMessageResponse {
+  string session_id = 1;
+  bytes audio_data = 2;
+  string text_content = 3;
+  EmotionInfo emotion = 4;
+}
+
+// 获取系统角色列表请求
+message GetSystemRolesRequest {}
+
+// 获取系统角色列表响应
+message GetSystemRolesResponse {
+  repeated SystemRole roles = 1;
+}
+
+// 获取聊天历史记录请求
+message GetChatHistoryRequest {
+  string child_id = 1;
+  string start_time = 2;
+  string end_time = 3;
+  int32 page = 4;
+  int32 page_size = 5;
+}
+
+// 获取聊天历史记录响应
+message GetChatHistoryResponse {
+  repeated ChatRecord records = 1;
+  int32 total = 2;
+}
+
+// 系统角色信息
+message SystemRole {
+  string role_id = 1;
+  string name = 2;
+  string description = 3;
+  string avatar_url = 4;
+  string voice_id = 5;
+}
+
+// 聊天记录
+message ChatRecord {
+  string record_id = 1;
+  string session_id = 2;
+  string child_id = 3;
+  string role_id = 4;
+  string text_content = 5;
+  string audio_url = 6;
+  EmotionInfo emotion = 7;
+  string created_at = 8;
+}
+
+// 情绪信息
+message EmotionInfo {
+  string emotion_type = 1;
+  float confidence = 2;
+  map<string, float> emotion_scores = 3;
+}

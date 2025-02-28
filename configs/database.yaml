@@ -1,0 +1,47 @@
+# Database Configuration
+
+mysql:
+  master:
+    host: ${MYSQL_MASTER_HOST:-localhost}
+    port: ${MYSQL_MASTER_PORT:-3306}
+    database: ${MYSQL_DATABASE:-sweekar}
+    username: ${MYSQL_USER:-root}
+    password: ${MYSQL_PASSWORD:-password}
+    max_idle_conns: 10
+    max_open_conns: 100
+    conn_max_lifetime: 3600
+  slaves:
+    - host: ${MYSQL_SLAVE1_HOST:-localhost}
+      port: ${MYSQL_SLAVE1_PORT:-3307}
+      database: ${MYSQL_DATABASE:-sweekar}
+      username: ${MYSQL_USER:-root}
+      password: ${MYSQL_PASSWORD:-password}
+      max_idle_conns: 10
+      max_open_conns: 100
+      conn_max_lifetime: 3600
+    - host: ${MYSQL_SLAVE2_HOST:-localhost}
+      port: ${MYSQL_SLAVE2_PORT:-3308}
+      database: ${MYSQL_DATABASE:-sweekar}
+      username: ${MYSQL_USER:-root}
+      password: ${MYSQL_PASSWORD:-password}
+      max_idle_conns: 10
+      max_open_conns: 100
+      conn_max_lifetime: 3600
+
+redis:
+  cluster:
+    nodes:
+      - host: ${REDIS_NODE1_HOST:-localhost}
+        port: ${REDIS_NODE1_PORT:-6379}
+      - host: ${REDIS_NODE2_HOST:-localhost}
+        port: ${REDIS_NODE2_PORT:-6380}
+      - host: ${REDIS_NODE3_HOST:-localhost}
+        port: ${REDIS_NODE3_PORT:-6381}
+    password: ${REDIS_PASSWORD:-}
+    dial_timeout: 5
+    read_timeout: 3
+    write_timeout: 3
+    pool_size: 100
+    min_idle_conns: 10
+    max_retries: 3
+    retry_backoff: 1

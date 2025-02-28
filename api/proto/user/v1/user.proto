@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package user.v1;
+
+option go_package = "github.com/sweekar/api/proto/user/v1;userv1";
+
+// 用户服务定义
+service UserService {
+  // 家长注册
+  rpc ParentRegister(ParentRegisterRequest) returns (ParentRegisterResponse);
+  // 家长登录
+  rpc ParentLogin(ParentLoginRequest) returns (ParentLoginResponse);
+  // 创建儿童账户
+  rpc CreateChildAccount(CreateChildAccountRequest) returns (CreateChildAccountResponse);
+  // 获取儿童账户列表
+  rpc GetChildAccounts(GetChildAccountsRequest) returns (GetChildAccountsResponse);
+}
+
+// 家长注册请求
+message ParentRegisterRequest {
+  string username = 1;
+  string password = 2;
+  string email = 3;
+  string phone = 4;
+}
+
+// 家长注册响应
+message ParentRegisterResponse {
+  string user_id = 1;
+  string token = 2;
+}
+
+// 家长登录请求
+message ParentLoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+// 家长登录响应
+message ParentLoginResponse {
+  string user_id = 1;
+  string token = 2;
+  UserInfo user_info = 3;
+}
+
+// 创建儿童账户请求
+message CreateChildAccountRequest {
+  string parent_id = 1;
+  string name = 2;
+  int32 age = 3;
+  string gender = 4;
+}
+
+// 创建儿童账户响应
+message CreateChildAccountResponse {
+  string child_id = 1;
+  ChildInfo child_info = 2;
+}
+
+// 获取儿童账户列表请求
+message GetChildAccountsRequest {
+  string parent_id = 1;
+}
+
+// 获取儿童账户列表响应
+message GetChildAccountsResponse {
+  repeated ChildInfo children = 1;
+}
+
+// 用户信息
+message UserInfo {
+  string user_id = 1;
+  string username = 2;
+  string email = 3;
+  string phone = 4;
+  string created_at = 5;
+  string updated_at = 6;
+}
+
+// 儿童信息
+message ChildInfo {
+  string child_id = 1;
+  string parent_id = 2;
+  string name = 3;
+  int32 age = 4;
+  string gender = 5;
+  string created_at = 6;
+  string updated_at = 7;
+}
