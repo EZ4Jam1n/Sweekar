@@ -4,16 +4,8 @@
 
 ```
 .
-├── api/                    # API 接口定义
-│   ├── proto/             # Protocol Buffers 定义文件
-│   └── swagger/           # Swagger API 文档
-├── cmd/                   # 主程序入口
-│   ├── user/             # 用户服务入口
-│   ├── chat/             # 聊天服务入口
-│   ├── emotion/          # 情绪分析服务入口
-│   └── gateway/          # API 网关入口
 ├── configs/              # 配置文件目录
-├── internal/             # 私有应用程序代码
+├── biz/             # 私有应用程序代码
 │   ├── user/             # 用户服务
 │   ├── chat/             # 聊天服务
 │   ├── emotion/          # 情绪分析服务
